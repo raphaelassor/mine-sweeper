@@ -11,33 +11,40 @@
 <body onload="init()">
     <h1>Mine Sweeper Game </h1>
     <div class="game-container">
-        <div class="features-container">
-            <h3> choose difficulty</h3>
-            <span class="life"></span>
-            <div class="stopwatch"></div>
-            <span id="hint"></span>
-        </div>
-
-        <div class="features-container">
-            <div class="size-btns-container">
-                <button class="size-btn" onclick="changeSize(4)">easy</button>
-                <button class="size-btn" onclick="changeSize(8)">medium</button>
-                <button class="size-btn" onclick="changeSize(12)">hard</button>
-            </div>
-            <div>
+        <span class='scores'>
+            <button class="undo" onclick="undoStep()">Undo</button>
+            
+            <h3>the best Score in Easy Level:<span id='4'></span> </h3>
+            <h3>the best Score in Medium Level:<span id='8'></span></h3>
+            <h3>the best Score in Hard Level:<span id='12'></span></h3>
+            <span class="features-container">
             <button class="safe-click-btn" onclick="safeClick()">Safe Click</button>
             <p><span id='safe-click'>3</span> clicks avialable</p>
             <button class = "manual-mode" onclick=" toggleManualMineMode(this)">Manual Mode</button>
-            <button class="undo" onclick="undoStep()">Undo</button>
-             </div>
-        </div>
+        </span>
+        </span>
         <div class="mine-sweeper">
-        <button class="restart-btn" onclick="reset()">🙂</button>
-        <table>
-        </table>
-        <h3>the best Score in Easy Level:<span id='4'></span> </h3>
-        <h3>the best Score in Medium Level:<span id='8'></span></h3>
-        <h3>the best Score in Hard Level:<span id='12'></span></h3>
+            <div class="stopwatch"></div>
+            <button class="restart-btn" onclick="reset()">🙂</button>
+            <span class=size-btn-container>
+           
+        <button class=" size-btn" onclick="changeSize(4)">easy</button>
+        <button class=" size-btn" onclick="changeSize(8)">medium</button>
+        <button class=" size-btn" onclick="changeSize(12)">hard</button>
+    </span>
+            <table>
+            </table>
+            <div class="features-container">
+                <span class="life"></span>
+                <span id="hint"></span>
+        </div>
+        
+        
+            <div>
+            </div>
+          
+        
+       
     </div>
 
     </div>

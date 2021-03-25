@@ -4,16 +4,16 @@ var gBoard;
 var gSize;
 var gGame = {
     isOn: false,
-    firstClick:false,
+    firstClick: false,
     shownCount: 0,
     flagCount: 0,
     secsPassed: 0,
     lives: 3,
-    hints:3,
-    hintMode:false,
-    safeClicks:3,
-    manualMode:false,
-    manualMineInput:false
+    hints: 3,
+    hintMode: false,
+    safeClicks: 3,
+    manualMode: false,
+    manualMineInput: false
 }
 var gLevel = {
     size: 8,
@@ -105,9 +105,9 @@ function renderBoard(board) {
 function cellClicked(elCell, event) {
     var idxI = elCell.getAttribute('data-i');
     var idxJ = elCell.getAttribute('data-j');
-    var cell=gBoard[idxI][idxJ];
-    if(gGame.manualMineInput){
-        cellManualMine(elCell,cell)
+    var cell = gBoard[idxI][idxJ];
+    if (gGame.manualMineInput) {
+        cellManualMine(elCell, cell)
         return
     }
     if (event.button === 2) {
@@ -116,25 +116,21 @@ function cellClicked(elCell, event) {
         checkGameWon()
         return;
     }
-    else if(cell.isFlagged||cell.isShown) return;
+    else if (cell.isFlagged || cell.isShown) return;
+    if (gGame.hintMode) {
+        cellClickHintMode(gBoard, idxI, idxJ);
+        return;
+    }
     //first click initializer
-    if(!gGame.firstClick){
+    if (!gGame.firstClick) {
+        firstClick(elCell);
         cell.isShown = true;
-        renderCelltoOPen(elCell, '');
-        startStopWatch();
-        if(!gGame.manualMode)deployMines(gBoard, gLevel.size)
-        setMinesNegsCount(gBoard)
-        gGame.firstClick=true;
-        gGame.isOn=true;
         // updateLog(gBoard,gGame)
     }
     if (!gGame.isOn) return;
     //mark cell 
     //hintMode
-    if(gGame.hintMode){
-        cellClickHintMode(gBoard, idxI, idxJ);
-        return;
-    }
+
     var value = cell.minesAroundCount;
     //clicked on mine 
     if (cell.isMine) {
@@ -150,7 +146,7 @@ function cellClicked(elCell, event) {
         }
     }
     //empty cell : can't be a bomb because of else. 
-   else if (!cell.minesAroundCount) {
+    else if (!cell.minesAroundCount) {
         expandShown(gBoard, idxI, idxJ);
         // updateLog(gBoard,gGame)
         checkGameWon()
@@ -161,11 +157,19 @@ function cellClicked(elCell, event) {
     renderCelltoOPen(elCell, value)
     // updateLog(gBoard,gGame)
 }
+function firstClick(elCell) {
+    renderCelltoOPen(elCell, '');
+    startStopWatch();
+    if (!gGame.manualMode) deployMines(gBoard, gLevel.size)
+    setMinesNegsCount(gBoard)
+    gGame.firstClick = true;
+    gGame.isOn = true;
+}
 
 function renderCelltoOPen(elCell, value) {
 
-   if(!gGame.hintMode) elCell.classList.add('open');
-   else elCell.classList.add('hint-open');
+    if (!gGame.hintMode) elCell.classList.add('open');
+    else elCell.classList.add('hint-open');
     elCell.innerHTML = value;
 }
 
@@ -201,10 +205,10 @@ function checkGameWon() {
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard.length; j++) {
             var cell = gBoard[i][j];
-           if (cell.isMine&&!cell.isShown){
-               if(!cell.isFlagged)return//mine and not shown-has to be a flag
-           }
-           else if(!cell.isShown)return;
+            if (cell.isMine && !cell.isShown) {
+                if (!cell.isFlagged) return//mine and not shown-has to be a flag
+            }
+            else if (!cell.isShown) return;
         }
     }
     // all mines are marked, all other cells are shown
@@ -221,20 +225,21 @@ function expandShown(board, idxI, idxJ) {
         for (var j = idxJ - 1; j <= idxJ + 1 && j < board[0].length; j++) {
             if (j < 0) continue
             var elCell = document.querySelector(`[data-i="${i}"][data-j="${j}"]`)
-            var cell=board[i][j]
-            var value=(cell.minesAroundCount)? cell.minesAroundCount:'';
-            if(gGame.hintMode){
-                if(cell.isMine)value=MINE;
-                renderCelltoOPen(elCell,value);
+            var cell = board[i][j]
+            var value = (cell.minesAroundCount) ? cell.minesAroundCount : '';
+            if (gGame.hintMode) {
+                if (cell.isMine) value = MINE;
+                renderCelltoOPen(elCell, value);
                 continue
             }
-            if(cell.isFlagged)continue
-            if(!cell.minesAroundCount&&!cell.isShown&&!cell.isMine){
-                cell.isShown=true;
-                expandShown(board,i,j);
+            if (cell.isFlagged) continue
+            if (!cell.minesAroundCount && !cell.isShown && !cell.isMine) {
+                cell.isShown = true;
+                expandShown(board, i, j);
             }
-            renderCelltoOPen(elCell,value)
-            cell.isShown=true;
+            renderCelltoOPen(elCell, value)
+            cell.isShown = true;
         }
     }
 }
+

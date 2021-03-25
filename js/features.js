@@ -90,6 +90,7 @@ function renderHints() {
 }
 
 function turnHintModeOn(elHint) {
+    if(!gGame.isOn) return;
     gGame.hintMode = true;
     gGame.hints--;
     elHint.classList.add('hint-select');
